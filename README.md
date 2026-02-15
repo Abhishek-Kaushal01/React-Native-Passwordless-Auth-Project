@@ -1,5 +1,7 @@
 # React Native Passwordless Auth Project
-A React Native mobile application implementing passwordless authentication using Email + OTP with session tracking.
+
+# Overview
+This project implements a passwordless authentication flow using Email + OTP in React Native (Expo). It features a local OTP generation system, session tracking with a live timer, and event logging using AsyncStorage.
 
 [![React Native](https://img.shields.io/badge/React%20Native-0.74.5-blue.svg)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo-~51.0.0-black.svg)](https://expo.dev/)
