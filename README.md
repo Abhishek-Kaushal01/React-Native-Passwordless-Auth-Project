@@ -1,73 +1,147 @@
 # React Native Passwordless Auth Project
+A React Native mobile application implementing passwordless authentication using Email + OTP with session tracking.
 
-## Overview
-This project implements a passwordless authentication flow using Email + OTP in React Native (Expo). It features a local OTP generation system, session tracking with a live timer, and event logging using AsyncStorage.
+[![React Native](https://img.shields.io/badge/React%20Native-0.74.5-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-~51.0.0-black.svg)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-~5.3.3-blue.svg)](https://www.typescriptlang.org/)
 
-## Features
-1.  **Email + OTP Login**: User enters email, receives a locally generated OTP.
-2.  **OTP Security**:
-    -   6-digit numeric code.
-    -   Expires in 60 seconds.
-    -   Maximum 3 attempts allowed.
-    -   Generates a new OTP on request, invalidating the previous one.
-3.  **Session Management**:
-    -   Tracks login duration in real-time.
-    -   Persists session start time in memory (scoped to app lifecycle).
-    -   Auto-logout support.
-4.  **Logging**: Important events (OTP generation, success, failure) are logged to AsyncStorage.
 
-## Setup Instructions
+## 📱 Features
+
+- ✅ Email-based passwordless login
+- ✅ 6-digit OTP verification (60-second expiry, 3 attempts max)
+- ✅ Live session duration tracking with real-time timer
+- ✅ Clean architecture with TypeScript
+- ✅ AsyncStorage integration for OTP management
+- ✅ Expo framework for cross-platform support
+
+## 🛠️ Tech Stack
+
+- **React Native** (v0.74.5) via Expo (~51.0.0)
+- **TypeScript** (~5.3.3)
+- **AsyncStorage** (v1.23.1)
+- **React Hooks** (useState, useEffect, useMemo, useRef)
+
+---
+
+## 📦 Download Android APK
+
+### Quick Install (Recommended)
+
+👉 **[Go to Releases →](https://github.com/kinshukkush/REACT-NATIVE-PASSWORDLESS-AUTH/releases)** Download the latest APK
+
+**Installation Steps:**
+1. Download APK from the Releases section
+2. Open the downloaded file on your Android device
+3. Allow installation from unknown sources if prompted
+4. Install and launch the app
+
+---
+
+## 🚀 Run from Source
 
 ### Prerequisites
--   Node.js installed.
--   Expo Go app on your mobile device (or Android Studio/Xcode for emulator).
 
-### Installation
-1.  Clone the repository or navigate to the project directory.
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Start the app:
-    ```bash
-    npx expo start
-    ```
-4.  Scan the QR code with Expo Go (Android/iOS) or press `a` for Android Emulator / `i` for iOS Simulator.
+- Node.js 18+ ([Download](https://nodejs.org/))
+- Expo Go app - [Android](https://play.google.com/store/apps/details?id=host.exp.exponent) | [iOS](https://apps.apple.com/app/expo-go/id982107779)
 
-## Architecture
+### Clone & Run
 
-### 1. OTP Logic & Expiry
--   **Storage**: OTPs are stored in an in-memory `Map<string, OtpData>`, keyed by email. This ensures O(1) access and simple cleanup.
--   **Expiry**: Each OTP record has an `expiresAt` timestamp. The `validateOtp` function checks `Date.now() > expiresAt`.
--   **Attempts**: An `attempts` counter tracks failed tries. If it reaches 3, the OTP is invalidated.
+```bash
+git clone https://github.com/kinshukkush/REACT-NATIVE-PASSWORDLESS-AUTH.git
+cd REACT-NATIVE-PASSWORDLESS-AUTH
+npm install
+npm start
+```
 
-### 2. Data Structures
--   **`OtpData` Interface**:
-    ```typescript
-    interface OtpData {
-      code: string;
-      expiresAt: number;
-      attempts: number;
-    }
-    ```
-    Centralizes all necessary OTP state.
--   **`AuthContext` State**:
-    -   `user`: Current authenticated user info.
-    -   `isAuthenticated`: Boolean flag for navigation switching.
-    -   `sessionStartTime`: Timestamp for the duration timer.
+### Run Options
 
-### 3. External SDK Integration
-**Chosen SDK: `@react-native-async-storage/async-storage`**
--   **Purpose**: Used to implement a persistent `Logger` service (`src/services/Logger.ts`).
--   **Why**: AsyncStorage is lightweight and standard for React Native data persistence, suitable for log storage in this scope.
+**📱 On Your Phone (Expo Go - WiFi)**
+- Make sure phone and PC are on the same WiFi
+- Scan the QR code with Expo Go (Android) or Camera (iOS)
 
-## Project Structure
--   `src/screens`: UI Components (Login, Otp, Session).
--   `src/services`: Business logic (OtpManager, Logger).
--   `src/context`: Global state (AuthContext).
--   `src/hooks`: Custom hooks (useSessionTimer).
--   `src/types`: TypeScript definitions.
+**🔌 On Your Phone (USB Debugging)**
+```bash
+# Enable USB debugging on your phone first
+adb devices  # Verify connection
+npm run android
+```
 
-## Key Files
--   `src/services/OtpManager.ts`: Core business logic for OTPs.
--   `src/hooks/useSessionTimer.ts`: Hook for the session duration timer.
+**💻 On Android Studio Emulator**
+```bash
+# Start emulator from Android Studio
+npm run android
+```
+
+**🌐 On Web Browser**
+```bash
+npm run web
+# Opens at http://localhost:8081
+```
+
+---
+
+## 🎯 How to Use
+
+### Login Flow
+
+1. **Enter Email** → Tap "Send OTP"
+2. **View OTP** → Check alert popup (dev mode shows OTP)
+3. **Enter OTP** → Type the 6-digit code
+4. **Session** → View live session timer
+5. **Logout** → Tap logout button
+
+### OTP Rules
+
+- ⏱️ **Expiry**: 60 seconds
+- 🔢 **Length**: 6 digits
+- 🚫 **Max Attempts**: 3 per email
+- 🔄 **Resend**: Invalidates old OTP, resets attempts
+- 📧 **Per Email**: Isolated OTP state per email address
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── screens/              # UI Components
+│   ├── LoginScreen.tsx   # Email input
+│   ├── OtpScreen.tsx     # OTP verification
+│   └── SessionScreen.tsx # Active session
+├── hooks/                # Custom React Hooks
+│   └── useSessionTimer.ts
+├── services/             # Business Logic
+│   ├── otpManager.ts     # OTP operations
+│   └── analytics.ts      # Event logging
+└── types/                # TypeScript Definitions
+    └── auth.ts
+```
+
+---
+
+## 🧪 Testing
+
+### Test Cases
+
+1. ✅ **Happy Path**: Email → OTP → Session → Logout
+2. ⏰ **Expired OTP**: Wait 60+ seconds before verification
+3. ❌ **Wrong OTP**: Enter incorrect OTP 3 times
+4. 🔄 **Resend OTP**: Request new OTP after expiry
+5. 📱 **Background**: Timer continues when app is backgrounded
+
+---
+
+## 🎨 Technical Highlights
+
+- **Clean Architecture**: Separation of UI, logic, and effects
+- **Type Safety**: Full TypeScript with strict mode
+- **Memory Safe**: Proper useEffect cleanup
+- **Background-Safe Timer**: Timestamp-based calculation
+- **Per-Email Storage**: O(1) lookup with complete metadata
+- **AsyncStorage SDK**: Local storage and event logging
+
+---
+
+
+**Built with ❤️ using React Native, TypeScript, and Expo**
