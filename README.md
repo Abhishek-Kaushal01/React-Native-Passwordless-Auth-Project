@@ -25,20 +25,6 @@ This project implements a passwordless authentication flow using Email + OTP in 
 
 ---
 
-## 📦 Download Android APK
-
-### Quick Install (Recommended)
-
-👉 **[Go to Releases →](https://github.com/Abhishek-Kaushal01/React-Native-Passwordless-Auth-Project/releases)** Download the latest APK
-
-**Installation Steps:**
-1. Download APK from the Releases section
-2. Open the downloaded file on your Android device
-3. Allow installation from unknown sources if prompted
-4. Install and launch the app
-
----
-
 ## 🚀 Run from Source
 
 ### Prerequisites
